@@ -1,0 +1,35 @@
+{
+    "compilerOptions": {
+        "target": "ES2015",
+        "module": "ESNext",
+        "moduleResolution": "node",
+        "esModuleInterop": true,
+        "skipLibCheck": true,
+        "forceConsistentCasingInFileNames": true,
+        "strict": true,
+        "allowJs": false,
+
+        "declaration": true,
+        "outDir": "dist",
+        "rootDir": "src",
+
+        "types": ["node", "jest"],
+        // "resolveJsonModule": true,
+        "allowSyntheticDefaultImports": true,
+
+        "noUnusedLocals": true,
+        "noUnusedParameters": true,
+        "noImplicitReturns": true,
+        "noImplicitAny": true,
+        "noFallthroughCasesInSwitch": true,
+
+        "sourceMap": true,
+        "inlineSources": true,
+        "declarationMap": true,
+
+        "noEmitOnError": true,
+        "exactOptionalPropertyTypes": true
+    },
+    "include": ["src/**/*.ts", "src/core/generate-source-map.ts"],
+    "exclude": ["node_modules", "dist", "**/*.test.ts"]
+}
