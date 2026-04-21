@@ -54,7 +54,9 @@ export class FakeSourceMapGenerator {
             const realCode = readFileSync(filepath, 'utf8');
             this.createMappings(realCode, fakeCode);
         } catch (e) {
-            console.error(`Cant read file: ${filepath}`, e);
+            throw new Error(
+                `Failed to read or process file: ${filepath} - ${e instanceof Error ? e.message : String(e)}`,
+            );
         }
     }
 
@@ -84,7 +86,9 @@ export class FakeSourceMapGenerator {
             const appended = `${existingContent}\n${this.toInlinable()}`;
             writeFileSync(filepath, appended);
         } catch (e) {
-            console.error(`Failed to append source map to file: ${filepath}`, e);
+            throw new Error(
+                `Failed to append source map to file: ${filepath} - ${e instanceof Error ? e.message : String(e)}`,
+            );
         }
     }
 }

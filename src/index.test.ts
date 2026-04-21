@@ -43,12 +43,11 @@ describe('FakeSourceMapGenerator File Operations', () => {
     });
 
     it('should handle file read errors', () => {
-        const consoleSpy = jest.spyOn(console, 'error').mockImplementation(() => {});
         (readFileSync as jest.Mock).mockImplementationOnce(() => {
             throw new Error('Read error');
         });
-        generator.fromFile('missing.js', '');
-        expect(consoleSpy).toHaveBeenCalled();
-        consoleSpy.mockRestore();
+        expect(() => generator.fromFile('missing.js', '')).toThrow(
+            'Failed to read or process file: missing.js - Read error',
+        );
     });
 });
