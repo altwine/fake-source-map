@@ -1,24 +1,24 @@
-# fake-source-map v1.0.1 🎭
-Prank developers with fake source maps!
+# fake-source-map ![npm version](https://img.shields.io/npm/v/fake-source-map)
+Generates fake source maps for real javascript code
 
-## 🚀 Installation
+## Installation
 Get it straight from NPM:
 ```shell
 npm i fake-source-map
 ```
 
-## 🔨 Building from Source
+## Building from Source
 Build it yourself:
 ```shell
-git clone https://github.com/altwine/fake-source-map.git
-cd fake-source-map
-npm install
-npm run format
-npm run test
-npm run build
+$ git clone https://github.com/altwine/fake-source-map.git
+$ cd fake-source-map
+$ npm install
+$ npm run format
+$ npm run test
+$ npm run build
 ```
 
-## 💻 API Usage
+## API Usage
 ### Basic Example
 ```ts
 import { FakeSourceMapGenerator } from 'fake-source-map';
