@@ -1,5 +1,6 @@
 import { SourceMapGenerator } from 'source-map';
-import { writeFileSync, readFileSync } from 'fs';
+import { appendFileSync, readFileSync } from 'fs';
+import { appendFile, readFile } from 'fs/promises';
 
 export type FakeSourceMapGeneratorOptions = {
     filename?: string;
@@ -30,6 +31,9 @@ export class FakeSourceMapGenerator {
 
         const genLines = realCode.split('\n');
         const genLinesLength = genLines.length;
+
+        const nextRandom = createSeededRandom(realCode + fakeCode);
+
         for (let line = 1; genLinesLength > line - 1; ++line) {
             const genLine = genLines[line - 1];
             const genLineLength = genLine.length + (this.skipWhitespaces ? 0 : 1);
@@ -38,8 +42,8 @@ export class FakeSourceMapGenerator {
                     const char = genLine[column];
                     if (char === ' ' || char === '\t' || char === '\r') continue;
                 }
-                const srcLine = Math.floor(Math.random() * srcLines.length);
-                const srcCol = Math.floor(Math.random() * (srcLines[srcLine]?.length ?? 0));
+                const srcLine = Math.floor(nextRandom() * srcLines.length);
+                const srcCol = Math.floor(nextRandom() * (srcLines[srcLine]?.length ?? 0));
                 this.sourceMap.addMapping({
                     generated: { line, column },
                     original: { line: srcLine + 1, column: srcCol },
@@ -52,6 +56,17 @@ export class FakeSourceMapGenerator {
     public fromFile(filepath: string, fakeCode: string) {
         try {
             const realCode = readFileSync(filepath, 'utf8');
+            this.createMappings(realCode, fakeCode);
+        } catch (e) {
+            throw new Error(
+                `Failed to read or process file: ${filepath} - ${e instanceof Error ? e.message : String(e)}`,
+            );
+        }
+    }
+
+    public async fromFileAsync(filepath: string, fakeCode: string): Promise<void> {
+        try {
+            const realCode = await readFile(filepath, 'utf8');
             this.createMappings(realCode, fakeCode);
         } catch (e) {
             throw new Error(
@@ -82,13 +97,35 @@ export class FakeSourceMapGenerator {
 
     public appendToFile(filepath: string) {
         try {
-            const existingContent = readFileSync(filepath, 'utf8');
-            const appended = `${existingContent}\n${this.toInlinable()}`;
-            writeFileSync(filepath, appended);
+            appendFileSync(filepath, `\n${this.toInlinable()}`);
         } catch (e) {
             throw new Error(
                 `Failed to append source map to file: ${filepath} - ${e instanceof Error ? e.message : String(e)}`,
             );
         }
     }
+
+    public async appendToFileAsync(filepath: string): Promise<void> {
+        try {
+            await appendFile(filepath, `\n${this.toInlinable()}`);
+        } catch (e) {
+            throw new Error(
+                `Failed to append source map to file: ${filepath} - ${e instanceof Error ? e.message : String(e)}`,
+            );
+        }
+    }
+}
+
+function createSeededRandom(seed: string) {
+    let hash = 0;
+    for (let i = 0; i < seed.length; i++) {
+        hash = (hash << 5) - hash + seed.charCodeAt(i);
+        hash |= 0;
+    }
+    let state = Math.abs(hash);
+
+    return () => {
+        state = (state * 1103515245 + 12345) & 0x7fffffff;
+        return state / 0x7fffffff;
+    };
 }

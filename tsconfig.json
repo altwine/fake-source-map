@@ -28,8 +28,8 @@
         "declarationMap": true,
 
         "noEmitOnError": true,
-        "exactOptionalPropertyTypes": true
+        "exactOptionalPropertyTypes": true,
     },
-    "include": ["src/**/*.ts", "src/core/generate-source-map.ts"],
-    "exclude": ["node_modules", "dist", "**/*.test.ts"]
+    "include": ["src/**/*.ts", "src/index.ts"],
+    "exclude": ["node_modules", "dist", "**/*.test.ts"],
 }

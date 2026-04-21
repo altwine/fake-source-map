@@ -2,9 +2,7 @@ jest.mock('source-map', () => ({
     SourceMapGenerator: jest.fn(() => ({
         setSourceContent: jest.fn(),
         addMapping: jest.fn(),
-        toJSON: jest.fn(() => {
-            version: 3;
-        }),
+        toJSON: jest.fn(() => ({ version: 3 })),
         toString: jest.fn(() => 'test-map'),
     })),
 }));
@@ -12,10 +10,11 @@ jest.mock('source-map', () => ({
 jest.mock('fs', () => ({
     readFileSync: jest.fn(() => 'file-content'),
     writeFileSync: jest.fn(),
+    appendFileSync: jest.fn(),
 }));
 
 import { FakeSourceMapGenerator } from './index';
-import { readFileSync, writeFileSync } from 'fs';
+import { appendFileSync, readFileSync } from 'fs';
 
 describe('FakeSourceMapGenerator File Operations', () => {
     let generator: FakeSourceMapGenerator;
@@ -34,11 +33,10 @@ describe('FakeSourceMapGenerator File Operations', () => {
     });
 
     it('should append source map to file', () => {
-        (readFileSync as jest.Mock).mockReturnValueOnce('existing-content');
         generator.appendToFile('output.js');
-        expect(writeFileSync).toHaveBeenCalledWith(
+        expect(appendFileSync).toHaveBeenCalledWith(
             'output.js',
-            'existing-content\n//# sourceMappingURL=data:application/json;base64,dGVzdC1tYXA=',
+            '\n//# sourceMappingURL=data:application/json;base64,dGVzdC1tYXA=',
         );
     });
 

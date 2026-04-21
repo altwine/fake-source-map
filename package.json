@@ -1,10 +1,14 @@
 {
     "name": "fake-source-map",
     "author": "altwine",
-    "description": "Prank devtools bros :-)",
+    "description": "Generates fake source maps for real javascript code",
     "homepage": "https://github.com/altwine/fake-source-map#readme",
-    "keywords": ["source-map", "fake"],
-    "version": "1.0.1",
+    "keywords": [
+        "source-map",
+        "fake",
+        "fake-source-map"
+    ],
+    "version": "1.0.2",
     "type": "module",
     "files": [
         "dist"
