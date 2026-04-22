@@ -1,6 +1,8 @@
 # fake-source-map ![npm version](https://img.shields.io/npm/v/fake-source-map)
 Generates fake source maps for real javascript code
 
+![Devtools screenshot with source map file opened](./assets/screenshot.webp)
+
 ## Installation
 Get it straight from NPM:
 ```shell
